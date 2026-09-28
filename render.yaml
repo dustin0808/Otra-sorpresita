@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: otra-sorpresita
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /

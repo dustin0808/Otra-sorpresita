@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Para mi persona favorita</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "Trebuchet MS", Georgia, serif;
+      color: #352044;
+      background: #fff0f6;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      --ink: #352044;
+      --paper: #fff9fd;
+      --coral: #efa3cf;
+      --green: #e4d5f4;
+      --yellow: #f5d5e8;
+      --blue: #8050ad;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 1.5rem;
+      background-color: #fff0f6;
+      background-image: radial-gradient(#bd9ad6 0.7px, transparent 0.7px);
+      background-size: 15px 15px;
+    }
+
+    main {
+      width: min(100%, 1080px);
+      margin: 0 auto;
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0 0.75rem;
+      border-bottom: 2px solid var(--ink);
+      color: #68477c;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .opening {
+      display: block;
+      padding: 2rem 1rem 3.25rem;
+    }
+
+    .question-label {
+      margin: 0 0 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 400;
+    }
+
+    h1 {
+      max-width: 540px;
+      font-size: 68px;
+      line-height: 0.98;
+    }
+
+    h1 span {
+      color: #8050ad;
+      font-style: italic;
+    }
+
+    .letter {
+      max-width: 60ch;
+      margin: 1.25rem 0 0;
+      color: #594766;
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    .question {
+      position: relative;
+      padding: 2.5rem clamp(1.25rem, 6vw, 4.5rem) 2.25rem;
+      overflow: hidden;
+      background: var(--coral);
+      box-shadow: 10px 10px 0 var(--ink);
+    }
+
+    .question::after {
+      position: absolute;
+      top: -65px;
+      right: -48px;
+      width: 190px;
+      height: 190px;
+      border: 2px solid rgb(53 32 68 / 22%);
+      border-radius: 50%;
+      content: "";
+      pointer-events: none;
+    }
+
+    .question-head {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    .question-number {
+      flex: 0 0 auto;
+      display: grid;
+      width: 58px;
+      aspect-ratio: 1;
+      place-items: center;
+      margin-top: 0.25rem;
+      background: var(--yellow);
+      font-size: 1.1rem;
+      font-weight: 800;
+      transform: rotate(-7deg);
+    }
+
+    .question-label {
+      color: #68477c;
+    }
+
+    h2 {
+      font-size: 48px;
+      line-height: 1.05;
+    }
+
+    .song-options,
+    .answer-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.25rem;
+      margin: 2rem 0 0 4.75rem;
+    }
+
+    .song-choice {
+      min-width: 0;
+      padding: 0.75rem;
+      border: 3px solid #edc9df;
+      background: #fff9fd;
+      color: var(--ink);
+      cursor: pointer;
+      text-align: left;
+      transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+
+    .song-choice:hover {
+      transform: translateY(-2px);
+    }
+
+    .song-choice:focus-visible {
+      outline: 3px solid var(--ink);
+      outline-offset: 3px;
+    }
+
+    .song-choice.is-selected:not(.is-correct-answer) {
+      border-color: #d84d99;
+      background: #f6c6e0;
+    }
+
+    .song-choice.is-correct-answer {
+      border-color: #684090;
+      background: #8050ad;
+      color: white;
+      box-shadow: 0 0 0 2px #684090;
+    }
+
+    .song-choice.is-correct-answer .song-artist,
+    .song-choice.is-correct-answer .song-time {
+      color: #fff4ff;
+    }
+
+    .song-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      align-items: baseline;
+      padding: 0 0.2rem 0.65rem;
+    }
+
+    .song-title {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.3rem;
+      line-height: 1.2;
+    }
+
+    .song-artist,
+    .song-time {
+      margin: 0.2rem 0 0;
+      color: #68477c;
+      font-size: 0.85rem;
+    }
+
+    .song-time {
+      flex: 0 0 auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .song-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.75rem;
+      align-items: center;
+      margin-top: 0.85rem;
+    }
+
+    .song-link {
+      color: #684090;
+      font-weight: 700;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .choose-answer {
+      min-height: 40px;
+      padding: 0.55rem 0.8rem;
+      border: 1px solid #8050ad;
+      border-radius: 3px;
+      background: #fff9fd;
+      color: #352044;
+      font: 700 0.9rem "Trebuchet MS", sans-serif;
+      cursor: pointer;
+    }
+
+    .choose-answer:hover {
+      background: #f6c6e0;
+    }
+
+    .song-choice.is-correct-answer .choose-answer {
+      border-color: #fff4ff;
+      background: #fff4ff;
+      color: #684090;
+    }
+
+    .song-choice.is-neutral {
+      border-color: #684090;
+      background: #8050ad;
+      color: white;
+    }
+
+    .song-choice.is-neutral .song-artist {
+      color: #fff4ff;
+    }
+
+    .song-choice.is-neutral .choose-answer {
+      border-color: #fff4ff;
+      background: #fff4ff;
+      color: #684090;
+    }
+
+    .song-choice.is-neutral .choose-answer[aria-pressed="true"] {
+      background: #dfc7f0;
+      color: #352044;
+    }
+
+    .song-choice.is-selected.is-correct-answer .choose-answer {
+      border-color: #fff4ff;
+      background: #dfc7f0;
+      color: #352044;
+    }
+
+    .continue-question {
+      display: block;
+      min-height: 46px;
+      margin: 1.25rem 0 0 auto;
+      padding: 0.7rem 1rem;
+      border: 0;
+      background: var(--ink);
+      color: white;
+      font: 700 0.95rem "Trebuchet MS", sans-serif;
+      cursor: pointer;
+    }
+
+    .continue-question[hidden] {
+      display: none;
+    }
+
+    .continue-question:focus-visible {
+      outline: 3px solid var(--paper);
+      outline-offset: 4px;
+    }
+
+    .choose-answer:focus-visible,
+    .song-link:focus-visible {
+      outline: 3px solid var(--paper);
+      outline-offset: 4px;
+    }
+
+    .selection-message {
+      margin: 1.5rem 0 0 4.75rem;
+      padding: 1rem 1.2rem;
+      border-left: 5px solid #d84d99;
+      background: #fff9fd;
+      color: #352044;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      animation: appear 220ms ease-out;
+    }
+
+    .selection-message[hidden] {
+      display: none;
+    }
+
+    .selection-message.is-correct {
+      border-color: #684090;
+      background: #8050ad;
+      color: white;
+    }
+
+    footer {
+      padding: 1.7rem 0.25rem 0;
+      color: #68477c;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1rem;
+      font-style: italic;
+      text-align: right;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 1rem;
+      }
+
+      .opening {
+        padding: 2rem 0.25rem 2.5rem;
+      }
+
+      h1 {
+        font-size: 52px;
+      }
+
+
+      .question {
+        padding: 1.5rem 1.25rem;
+        box-shadow: 6px 6px 0 var(--ink);
+      }
+
+      .question-head {
+        gap: 0.85rem;
+      }
+
+      .question-number {
+        width: 46px;
+      }
+
+      h2 {
+        font-size: 38px;
+      }
+
+      .song-options {
+        margin-left: 0;
+      }
+
+      .selection-message {
+        margin-left: 0;
+      }
+
+      .continue-question {
+        width: 100%;
+      }
+
+      .song-options,
+      .answer-options {
+        grid-template-columns: 1fr;
+        gap: 0.85rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="topline">
+      <span>Para mi persona favorita</span>
+    </div>
+
+    <header class="opening">
+      <div>
+        <h1>Hola, <span>amorcito.</span></h1>
+        <p class="letter">Hola, amor de mi vida. Después de hacerte esa cartita, sentí que era muy poco, teniendo en cuenta que ni siquiera te podré ver hoy, así que decidí hacer un poquito más, pero más interactivo y bonito, porque tú te mereces lo mejor. Espero que lo disfrutes, mi amor, aunque sea un poquito. ¡Te amoooo!</p>
+      </div>
+    </header>
+
+    <section class="question" aria-labelledby="question-title">
+      <div class="question-head">
+        <span class="question-number" id="question-number" aria-hidden="true">01</span>
+        <div>
+          <p class="question-label" id="question-label">Escucha los fragmentos</p>
+          <h2 id="question-title"></h2>
+        </div>
+      </div>
+
+      <div class="song-options" id="song-options" aria-label="Opciones de respuesta"></div>
+      <div class="selection-message" id="selection-message" role="status" aria-live="polite" hidden></div>
+      <button class="continue-question" id="continue-question" type="button" hidden>Siguiente pregunta <span aria-hidden="true">→</span></button>
+    </section>
+
+    <footer>Hecha especialmente para ti <span aria-hidden="true">♡</span></footer>
+  </main>
+
+  <script>
+    const tracks = [
+      { title: "Do Better", artist: "Cuco", videoId: "X_MQV0863D4", start: 153, end: 172 },
+      { title: "Sabes una cosa", artist: "Warner Music México", videoId: "UuGrc3vvdMw", start: 74, end: 92 },
+      { title: "EME", artist: "NSQK", videoId: "XJ5CQxEeRRw", start: 22, end: 38 },
+      { title: "Amtrak", artist: "Los Retros", videoId: "wpsjqOBkD6w", start: 43, end: 61, correct: true }
+    ];
+
+    const questions = [
+      {
+        kind: "songs",
+        prompt: "¿Cuál de estas partes de canciones crees que te he dedicado más veces?",
+        label: "Escucha los fragmentos",
+        options: tracks,
+        correctIndex: 3,
+        correctMessage: "¡Vaya, sí que sabes leerme la mente!",
+        incorrectMessage: "La verdad, más que las demás canciones, siento que la de Labios Rotos es mejor."
+      },
+      {
+        kind: "couples",
+        prompt: "¿Qué parejita de anime digo que somos?",
+        label: "Elige nuestra parejita",
+        options: [
+          { title: "Taira y Azuma", series: "You and I Are Polar Opposites" },
+          { title: "Nishi y Yamada", series: "You and I Are Polar Opposites" },
+          { title: "Miyamura y Hori", series: "Horimiya" }
+        ],
+        correctIndex: 1,
+        correctMessage: "¡Sí sabeeesssssss! Te amo, te amo, te amo, te amooo. Sí somos esosss; cuando te vea te daré muchos abrazos por saber esta.",
+        incorrectMessage: "Nop, esa no era, niña. Esta pregunta era fácil, así que si ves este mensaje me voy a enojar >:("
+      },
+      {
+        kind: "places",
+        prompt: "¿En dónde te pedí que fueras mi novia?",
+        label: "A ver si te acuerdas",
+        options: [
+          { title: "Galerías", series: "Frente al Cinépolis" },
+          { title: "Sikara", series: "Frente al Elite Cinema" },
+          { title: "Plaza Cumbres", series: "Frente al Cinépolis" }
+        ],
+        correctIndex: 0,
+        correctMessage: "La verdad, si no lo recordaras, me sentiría muy triste.",
+        incorrectMessage: ":,("
+      },
+      {
+        kind: "feedback",
+        prompt: "¿Te gustó esta pequeña encuesta y la cartita?",
+        label: "Dime con sinceridad",
+        options: [
+          { title: "Sí" },
+          { title: "No" }
+        ],
+        responses: [
+          "Me alegro demasiado, de verdad. No me sentía seguro de mis regalos, así que les puse mucho empeño. Me calma demasiado saber que te hayan gustado. Te amo demasiado, mi cielo.",
+          "Perdóname si no te gustó. Te prometo que me esforzaré para que mi próxima sorpresa sea mucho mejor que esta."
+        ]
+      },
+      {
+        kind: "birthday",
+        prompt: "¿Quién cumple años hoy???",
+        label: "La última, lo prometo",
+        options: [
+          { title: "Tu novio" },
+          { title: "Raquel" },
+          { title: "Yooo" },
+          { title: "Smiley" }
+        ],
+        correctIndex: 2,
+        responses: [
+          "Claro que no, no te hagas loca y coopera, mugrilla",
+          "Raquel no tiene cumpleaños, no te hagas",
+          {
+            url: "https://www.youtube.com/watch?v=5QNXO5MGBEA&list=RD5QNXO5MGBEA&start_radio=1",
+            linkText: "Abrir mi sorpresa en YouTube ↗"
+          },
+          "Coopera amor para que acabe esto jsjs"
+        ]
+      }
+    ];
+
+    const options = document.querySelector("#song-options");
+    const selectionMessage = document.querySelector("#selection-message");
+    const questionNumber = document.querySelector("#question-number");
+    const questionLabel = document.querySelector("#question-label");
+    const questionTitle = document.querySelector("#question-title");
+    const continueButton = document.querySelector("#continue-question");
+    let currentQuestionIndex = 0;
+
+    function formatTime(seconds) {
+      return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+    }
+
+    function selectOption(index, choices) {
+      const question = questions[currentQuestionIndex];
+      const hasCorrectAnswer = Number.isInteger(question.correctIndex);
+      const isCorrect = !hasCorrectAnswer || index === question.correctIndex;
+
+      choices.forEach(({ choice, chooseButton }, choiceIndex) => {
+        const isSelected = choiceIndex === index;
+        const isCorrectAnswer = !hasCorrectAnswer || choiceIndex === question.correctIndex;
+        choice.classList.toggle("is-selected", isSelected);
+        choice.classList.toggle("is-correct-answer", isCorrectAnswer);
+        chooseButton.setAttribute("aria-pressed", String(isSelected));
+      });
+
+      const response = question.responses
+        ? question.responses[index]
+        : isCorrect ? question.correctMessage : question.incorrectMessage;
+      selectionMessage.replaceChildren();
+      if (typeof response === "string") {
+        selectionMessage.textContent = response;
+      } else {
+        const surpriseLink = document.createElement("a");
+        surpriseLink.className = "song-link";
+        surpriseLink.href = response.url;
+        surpriseLink.target = "_blank";
+        surpriseLink.rel = "noopener noreferrer";
+        surpriseLink.textContent = response.linkText;
+        selectionMessage.append(surpriseLink);
+      }
+      selectionMessage.classList.toggle("is-correct", isCorrect);
+      selectionMessage.hidden = false;
+      continueButton.hidden = currentQuestionIndex === questions.length - 1;
+    }
+
+    function createChoice(option, index, question) {
+      const choice = document.createElement("div");
+      choice.className = "song-choice";
+      choice.classList.toggle("is-neutral", question.kind === "feedback");
+      choice.id = `song-choice-${index}`;
+      choice.setAttribute("role", "group");
+      const secondaryText = question.kind === "songs" ? option.artist : option.series;
+      const optionName = secondaryText ? `${option.title}, ${secondaryText}` : option.title;
+      choice.setAttribute("aria-label", optionName);
+
+      const heading = document.createElement("div");
+      heading.className = "song-heading";
+
+      const details = document.createElement("div");
+      const title = document.createElement("h3");
+      title.className = "song-title";
+      title.textContent = option.title;
+      details.append(title);
+      if (secondaryText) {
+        const artist = document.createElement("p");
+        artist.className = "song-artist";
+        artist.textContent = secondaryText;
+        details.append(artist);
+      }
+
+      if (question.kind === "songs") {
+        const time = document.createElement("p");
+        time.className = "song-time";
+        time.textContent = `${formatTime(option.start)}–${formatTime(option.end)}`;
+        heading.append(details, time);
+      } else {
+        heading.append(details);
+      }
+
+      const actions = document.createElement("div");
+      actions.className = "song-actions";
+
+      if (question.kind === "songs") {
+        const listenLink = document.createElement("a");
+        listenLink.className = "song-link";
+        listenLink.href = `https://www.youtube.com/watch?v=${option.videoId}&t=${option.start}s`;
+        listenLink.target = "_blank";
+        listenLink.rel = "noopener noreferrer";
+        listenLink.textContent = `Escuchar desde ${formatTime(option.start)} en YouTube ↗`;
+        actions.append(listenLink);
+      }
+
+      const chooseButton = document.createElement("button");
+      chooseButton.className = "choose-answer";
+      chooseButton.type = "button";
+      chooseButton.textContent = "Elegir esta respuesta";
+      chooseButton.setAttribute("aria-pressed", "false");
+      actions.append(chooseButton);
+
+      choice.append(heading, actions);
+      options.append(choice);
+
+      chooseButton.addEventListener("click", () => selectOption(index, activeChoices));
+
+      return { choice, chooseButton, option };
+    }
+
+    let activeChoices = [];
+
+    function renderQuestion() {
+      const question = questions[currentQuestionIndex];
+      questionNumber.textContent = String(currentQuestionIndex + 1).padStart(2, "0");
+      questionLabel.textContent = question.label;
+      questionTitle.textContent = question.prompt;
+      selectionMessage.hidden = true;
+      continueButton.hidden = true;
+      options.replaceChildren();
+      options.classList.toggle("song-options", question.kind === "songs");
+      options.classList.toggle("answer-options", question.kind !== "songs");
+      activeChoices = question.options.map((option, index) => createChoice(option, index, question));
+    }
+
+    continueButton.addEventListener("click", () => {
+      currentQuestionIndex += 1;
+      renderQuestion();
+    });
+
+    renderQuestion();
+  </script>
+</body>
+</html>
